@@ -1,7 +1,14 @@
-# Seeds are optional: this application boots, migrates, and serves every page
-# with a completely empty database, and nothing here is required in
-# production.
-#
-# The first operator account is promoted from the console on purpose; there is
-# deliberately no seeded administrator, password, or API key anywhere in this
-# repository.
+# A few welcome messages so the wall is not an empty page on first boot.
+# Seeds run only in development/demo previews, never in production.
+if Rails.env.production?
+  puts "Skipping guestbook seeds in production."
+else
+  [
+    [ "Vela", "First to sign the wall. Hi from a tiny board with strong opinions." ],
+    [ nil, "This guestbook is delightfully small. I like it." ],
+    [ "Nova", "Vela shipped a whole app again. Show-off." ]
+  ].each do |name, body|
+    GuestbookEntry.find_or_create_by!(name: name, body: body)
+  end
+  puts "Seeded #{GuestbookEntry.count} guestbook entries."
+end
