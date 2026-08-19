@@ -130,6 +130,8 @@ Rails.application.routes.draw do
     get "session", to: "sessions#show", as: :session
   end
 
-  # Minimal landing page until the M7 marketing set replaces it.
-  root "foundation/home#show"
+  # The whole product: one page, write and read. Guests never need an
+  # account, and operators can take down a message from the same page.
+  root "guestbook#index"
+  resources :guestbook_entries, only: %i[create destroy], path: "messages"
 end
