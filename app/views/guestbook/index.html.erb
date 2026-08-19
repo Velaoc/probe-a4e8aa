@@ -1,0 +1,46 @@
+<% identity = Rails.configuration.x.foundation %>
+<% title "Guestbook" %>
+
+<section class="md-section" aria-labelledby="guestbook-title">
+  <div class="md-section__inner md-guestbook">
+    <header class="md-guestbook__header">
+      <p class="md-section__eyebrow"><%= identity[:application_name] %></p>
+      <h1 id="guestbook-title">Sign the guestbook</h1>
+      <p>Leave a short message and it lands on the wall below. No account needed — it really is this small.</p>
+    </header>
+
+    <div class="md-guestbook__layout">
+      <%= form_with model: @message, class: "md-card md-card--filled md-guestbook__form", aria: { label: "Leave a message" } do |form| %>
+        <%= render "foundation/components/text_field", form: form, attribute: :name, label: "Name (optional)", hint: "60 characters max" %>
+        <%= render "foundation/components/text_field", form: form, attribute: :body, label: "Message", type: :text_area, hint: "280 characters max" %>
+        <%= render "foundation/components/button", form: form, label: "Post to the wall", variant: :filled, attributes: { type: :submit, class: "md-guestbook__submit" } %>
+      <% end %>
+
+      <div class="md-guestbook__wall" aria-live="polite">
+        <h2 class="md-section__heading">The wall</h2>
+        <% if @messages.any? %>
+          <ol class="md-guestbook__list">
+            <% @messages.each do |entry| %>
+              <li>
+                <article class="md-card md-card--outlined md-guestbook__entry">
+                  <header class="md-guestbook__entry-head">
+                    <strong><%= entry.display_name %></strong>
+                    <time datetime="<%= entry.created_at.iso8601 %>"><%= entry.created_at.strftime("%b %e, %Y") %></time>
+                  </header>
+                  <p class="md-guestbook__body"><%= entry.body %></p>
+                  <% if user_signed_in? && current_user.admin? %>
+                    <%= button_to "Remove", guestbook_entry_path(entry), method: :delete,
+                          class: "md-button md-button--text md-guestbook__remove",
+                          form: { data: { turbo_confirm: "Remove this message?" } } %>
+                  <% end %>
+                </article>
+              </li>
+            <% end %>
+          </ol>
+        <% else %>
+          <p class="md-guestbook__empty">No messages yet — be the first to sign the wall.</p>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</section>
