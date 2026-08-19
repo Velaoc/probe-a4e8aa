@@ -1,0 +1,27 @@
+{
+  "name": "probe-a4e8aa",
+  "purpose": "One-page guestbook: visitors type a short message and see the wall of messages, newest first. No accounts, no commerce — just write and read.",
+  "actors": null,
+  "entities": [
+    {
+      "name": "Message",
+      "relationships": [
+        "has name and body text",
+        "fully anonymous, no owner account"
+      ]
+    }
+  ],
+  "workflows": [
+    {
+      "name": "Leave a message",
+      "description": "Visitor types a name (optional) and a short message, submits, and it appears on the wall."
+    },
+    {
+      "name": "Read the wall",
+      "description": "Visitor sees all messages, newest first, on the single page."
+    }
+  ],
+  "modules": [],
+  "integrations": null,
+  "seed_demo": "A few short welcome messages so the wall is not empty on first load."
+}
